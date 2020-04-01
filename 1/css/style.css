@@ -124,7 +124,7 @@ h2 {
 .fancy-link:after {
   display: block;
   content: '';
-  border-bottom: solid 1px #22a;
+  border-bottom: solid 1px #03aca3;
   transform: scaleX(0.0001);
   transition: transform 250ms ease-in-out; }
 

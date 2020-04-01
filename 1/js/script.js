@@ -79,21 +79,53 @@ $(function() {
 	// console.log($('input:text').val());
 
 // =========================== MAKING AN IMAGE SLIDESHOW =================================
-	var sources = [
-		"./images/laptop-mobile_small.jpg",
-		"./images/laptop-on-table_small.jpg",
-		"./images/people-office-group-team_small.jpg"
-	];
+	// var sources = [
+	// 	"./images/laptop-mobile_small.jpg",
+	// 	"./images/laptop-on-table_small.jpg",
+	// 	"./images/people-office-group-team_small.jpg"
+	// ];
 
-	var image = $('.gallery').find('img').first();
+	// var image = $('.gallery').find('img').first();
 
-	var i = 0;
-	setInterval( function() {
-		i = (i+1) % sources.length;
-		image.fadeOut( function() {
-			$(this).attr('src', sources[i]).fadeIn(); // $(this) = image
-		});
-	}, 2000);
+	// var i = 0;
+	// setInterval( function() {
+	// 	i = (i+1) % sources.length;
+	// 	image.fadeOut( function() {
+	// 		$(this).attr('src', sources[i]).fadeIn(); // $(this) = image
+	// 	});
+	// }, 2000);
 
+	// $('.gallery').css('display', 'none');
+
+// =========================== CHANGING CSS =================================
+	$('.red-box').css('height', '+=2rem');
+	const properties = $('p').css(['font-size', 'display', 'color']);
+	console.log(properties);
+	$('.green-box').css('user-select', 'none');
+
+	$('a').addClass('fancy-link');
+	$('div').addClass( function(i, cur){
+		if (cur === 'dummy') {
+			return 'red-box';
+		}
+	});
+
+// =========================== ADD DATA TO AN ELEMENT =================================
+const gallery = $('.gallery');
+
+var sources = [
+	"./images/laptop-mobile_small.jpg",
+	"./images/laptop-on-table_small.jpg",
+	"./images/people-office-group-team_small.jpg"
+];
+
+gallery.data('availableImages', sources);
+console.log(gallery.data('availableImages'));
+gallery.data('name', 'My-Gallery');
+console.log(gallery.data());
+
+// =========================== CONTENT OF AN ELEMENT =================================
+const markUpText = $('p:first').html();
+$('p:first').html(markUpText + '<strong>I have been added here via jQuery</strong>');
 	
 });
