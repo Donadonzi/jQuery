@@ -68,5 +68,14 @@ $(function() {
 	// $('form').empty();
 	// $('p:first').empty();
 
+	$('#special-link').attr('href', 'http://google.com');
+	console.log($('#special-link').attr('href'));
+	var checkBool = $('input:checkbox').prop('checked');
+	console.log(checkBool);
+	console.log($('input:text').val());
+	console.log($('input[type="range"]').val());
+	$('input:text').val("Donya Teymz");
+	console.log($('input:text').val());
+
 	
 });
