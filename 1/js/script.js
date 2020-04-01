@@ -68,14 +68,32 @@ $(function() {
 	// $('form').empty();
 	// $('p:first').empty();
 
-	$('#special-link').attr('href', 'http://google.com');
-	console.log($('#special-link').attr('href'));
-	var checkBool = $('input:checkbox').prop('checked');
-	console.log(checkBool);
-	console.log($('input:text').val());
-	console.log($('input[type="range"]').val());
-	$('input:text').val("Donya Teymz");
-	console.log($('input:text').val());
+// =========================== MANIPULATING ATTRIBUTES =================================
+	// $('#special-link').attr('href', 'http://google.com');
+	// console.log($('#special-link').attr('href'));
+	// var checkBool = $('input:checkbox').prop('checked');
+	// console.log(checkBool);
+	// console.log($('input:text').val());
+	// console.log($('input[type="range"]').val());
+	// $('input:text').val("Donya Teymz");
+	// console.log($('input:text').val());
+
+// =========================== MAKING AN IMAGE SLIDESHOW =================================
+	var sources = [
+		"./images/laptop-mobile_small.jpg",
+		"./images/laptop-on-table_small.jpg",
+		"./images/people-office-group-team_small.jpg"
+	];
+
+	var image = $('.gallery').find('img').first();
+
+	var i = 0;
+	setInterval( function() {
+		i = (i+1) % sources.length;
+		image.fadeOut( function() {
+			$(this).attr('src', sources[i]).fadeIn(); // $(this) = image
+		});
+	}, 2000);
 
 	
 });
