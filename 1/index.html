@@ -64,16 +64,31 @@
 				</ul>
 			</li>
 		</ul>
-		<form action="">
-			<h2>Submit Form</h2>
-			<input type="text" style="display: block" value="Donya">
-			<input type="email" style="display: block">
-			<input type="range" min="1" max="10" value="8" style="display: block">
-			<input type="password" style="display: block">
-			<input type="checkbox" name="cb" checked><label for="cb">Check me</label></br>
-			<textarea name="" id="" cols="30" rows="10"></textarea>
-			<input type="submit" value="Submit" style="display: block">
-			
+		<label for="selector" style="display: block">Choose a fruit</label></br>
+		<select id="selector" style="display: block">
+			<option value="">Apple</option>
+			<option value="">Peach</option>
+			<option value="">Melon</option>
+		</select><br>
+
+		
+		<h2>Submit Form</h2>
+		<form id="form" action="">
+			<input id="name" type="text" value="">
+			<span id="name-feedback"></span><br>
+				
+			<input id="password" type="password" value="">
+			<span id="password-feedback"></span><br>
+				
+			<textarea id="message" name="message" cols="30" rows="10"></textarea>
+			<span id="message-feedback"></span><br>
+				
+			<input id="checkbox" type="checkbox" name="cb">
+			<label for="checkbox">I accept</label>
+			<span id="checkbox-feedback"></span><br>
+				
+			<input type="submit" value="Submit">
+				
 		</form>
 	</div>
 	<div class="lightbox">

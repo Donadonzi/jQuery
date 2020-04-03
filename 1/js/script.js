@@ -95,7 +95,7 @@ $(function() {
 	// 	});
 	// }, 2000);
 
-	// $('.gallery').css('display', 'none');
+	$('.gallery').css('display', 'none');
 
 // =========================== CHANGING CSS =================================
 	// $('.red-box').css('height', '+=2rem');
@@ -190,34 +190,181 @@ $(function() {
 	// });
 
 // =========================== IMAGE GALLERY WITH LIGHTBOX PREVIEW=================================
-	const images = $('.gallery').find('img');
-	images.css('width', '33%').css('opacity', '.7');
+	// const images = $('.gallery').find('img');
+	// images.css('width', '33%').css('opacity', '.7');
 
-	images.mouseenter(function(){ 
-		$(this).stop().fadeTo(200, 1);
-	});
+	// images.mouseenter(function(){ 
+	// 	$(this).stop().fadeTo(200, 1);
+	// });
 
-	images.mouseleave(function() {
-		$(this).stop().fadeTo(200, .7);
-	});
+	// images.mouseleave(function() {
+	// 	$(this).stop().fadeTo(200, .7);
+	// });
 
-	images.click(function(){
-		const source = $(this).attr('src');
-		const image = $('<img>').attr('src', source).css('width', '150%');
-		$('.lightbox').empty().append(image).fadeIn();
-	});
+	// images.click(function(){
+	// 	const source = $(this).attr('src');
+	// 	const image = $('<img>').attr('src', source).css('width', '150%');
+	// 	$('.lightbox').empty().append(image).fadeIn();
+	// });
 
-	$('.lightbox').click(function(){
-		$(this).stop().fadeOut(200);
-	});
-	
+	// $('.lightbox').click(function(){
+	// 	$(this).stop().fadeOut(200);
+	// });
+
 // =========================== HANDLIGN KEYDOWN AND KEYUP EVENTS =================================
-	$('html').keydown(function(e){
-		console.log(e.which);
-		if (e.which === 39) {
-			$('.blue-box').stop().css('margin-left', '+=1rem');
+	// $('html').keydown(function(e){
+	// 	console.log(e.which);
+	// 	if (e.which === 39) {
+	// 		$('.blue-box').stop().css('margin-left', '+=1rem');
+	// 	}
+	// });
+
+// =========================== FOCUS AND BLUR EVENTS =================================
+	const inputFields = $('input:text, input:password, textarea');
+	inputFields.focus(function(){
+		$(this).css('box-shadow', '0 0 4px #666');
+	});
+
+	inputFields.blur(function(){
+		$(this).css('box-shadow', 'none');
+	});
+
+
+// ===== CHECKING IF NAME LENGTH IS LONGER THAN 3 =====
+	$('#username').blur(function() {
+		const username = $(this).val();
+		console.log(username);
+		if(username.length > 3) {
+			$(this).css('box-shadow', '0 0 4px green');
+		} else {
+			$(this).css('box-shadow', '0 0 4px red');
 		}
 	});
 
+// ===== CHECKING IF THE CHECKBOX IS CHECKED =====
+
+	$('#checkbox').change(function() {
+		const isChecked = $(this).is(':checked');
+		if(isChecked) {
+			$(this).add('label[for="cb"]').css('box-shadow', '0 0 4px green');
+		} else {
+			$(this).add('label[for="cb"]').css('box-shadow', '0 0 4px red');
+		}
+	});
+
+// ===== CHECKING THE SELECTED OPTION =====
+	$('#selector').change(function() {
+		const option = $(this).find(':selected').text();
+		alert(option);
+	});
+
+
+// ===== CHECKING THE TEXTAREA =====
+	
+	$('form').submit( function(event) {
+		const msg = $('#message').val().trim();
+		if(msg === "") {
+			$('#message').css('box-shadow', '0 0 4px red');
+			event.preventDefault();
+		} else {
+			$('#message').css('box-shadow', '0 0 4px green');
+		}
+	});
+
+// ===== VALIDATING THE FORM BEFORE SUBMITTION =====
+	$('#form').submit(function(event){
+		const name = $('#name').val();
+		const password = $('#password').val();
+		const message = $('#message').val();
+		const isChecked = $('#checkbox').is(':checked');
+
+		validateNameField(name, event);
+		validatePasswordField(password, event);
+
+		// I didn't do the textarea and checkbox cuz it was too similar and repetetive. Instead I did a better job
+		// with password checking rather than the instructor!
+	});
+
+	$('#password').focus(function(){
+		$('#password-feedback').text('Password must start with a capital letter, contain at least 7 characters, only digits and letters.');
+	});
+
+	$('#password').blur(function(e) {
+		validatePasswordField(password, event);
+	});
+
+	enableFastFeedback($("#form"));
 });
+
+// ===== Helper functions for form validation ======
+// name
+function validateNameField(name, event) {
+	if (!isValidName(name)) {
+		event.preventDefault();
+		$('#name-feedback').text('Please enter a correct name');
+	} else {
+		$('#name-feedback').text('');
+	}
+};
+
+function isValidName(name) {
+	return name.length >= 3;
+};
+
+// password
+function validatePasswordField(password, event) {
+	if (!isValidPassword(password)) {
+		event.preventDefault();
+		$('#password-feedback').text('Please enter a correct password');
+	} else {
+		$('#password-feedback').text('Ok!');
+	}
+};
+
+function isValidPassword(password) {
+	const validPassword = new RegExp("^((?=.+[A-Z])(?=.+[a-z])(?=.+[0-9]))(?=.{7,})");
+	return (validPassword.test(password));
+};
+
+
+// Just copied this from the github repo. Not worth writing it myself!
+// I deleted some parts and commented out. didn't spend too much time on it. But I think
+// it works fine for the password and name input elements. The rest is all the same!
+
+// In addition to the previous form validation code, we now provide faster
+// feedback to the user, namely when moving to the next input element.
+
+  
+
+  function enableFastFeedback(formElement) {
+    var nameInput = formElement.find("#name");
+    var passwordInput = formElement.find("#password");
+
+    nameInput.blur(function(e) {
+      var name = $(this).val();
+			highlight($(this), isValidName(name));
+			validateNameField(name, event);
+			
+    });
+
+    // passwordInput.blur(function() {
+    //   var password = $(this).val();
+    //   highlight($(this), isValidPassword(password));
+    // });
+
+  }
+
+  function highlight(element, isValid) {
+    var color = "#811";  // red
+    if (isValid) {
+      color = "#181";  // green
+    }
+
+    element.css("box-shadow", "0 0 4px " + color);
+  }
+
+
+
+
+
 
