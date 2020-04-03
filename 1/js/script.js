@@ -294,7 +294,8 @@ $(function() {
 	});
 
 	enableFastFeedback($("#form"));
-});
+
+}); // ************ END OF MAIN $ ******************** //
 
 // ===== Helper functions for form validation ======
 // name
@@ -361,8 +362,38 @@ function isValidPassword(password) {
     }
 
     element.css("box-shadow", "0 0 4px " + color);
-  }
+	}
 
+
+// =========================== AJAX =================================
+$(function(){
+
+	// $('#code').load("js/script.js", function(response, status) {
+	// 	if( status === 'error') {
+	// 		alert('Could not get the file!');
+	// 	}
+	// 	console.log(response);
+	// });
+
+	var flickrApiUrl = "https://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?";
+
+	$.getJSON(flickrApiUrl, {
+		tags: "bread, flower",
+    tagmode: "all",
+    format: "json"
+	}).done(function(response) {
+		console.log(response);
+		$.each(response.items, function(index, item){
+			$("<img>").attr("src", item.media.m).appendTo("#flickr");
+
+			if (index === 5) return false;
+
+		});
+	}).fail(function(error){
+		alert(error);
+	});
+
+});
 
 
 
