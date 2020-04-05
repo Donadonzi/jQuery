@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<script
+		src="https://code.jquery.com/jquery-3.4.1.min.js"
+		integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+		crossorigin="anonymous">
+		</script>
+	
+
+		<title>Distinguish between left and right mouse clicks</title>
+		<style>
+			p {
+				border: 3px solid black;
+				width: 70px;
+				border-radius: 10px;
+				text-align: center;
+			}
+
+			div {
+				color: red;
+				font-size: 25px;
+			}
+		</style>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script>
+				$(document).ready(function () {
+					$('p').click(function(){
+						$('#result').append('You Left Clicked!</br>');
+					});
+					$('p').contextmenu(function() {
+						$('#result').append('You Right Clicked!</br>');
+					});
+				});
+		</script>
+	</head>
+
+	<body>
+		<p>Click me</p>
+		<div id="result"></div>
+	</body>
+
+</html>
