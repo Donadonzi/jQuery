@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Donz jQuery in Action</title>
+
+	<style>
+		.ticker
+		{
+				background-color:#ABD1C0;
+				width:350px;
+				height:200px;
+				border:3px solid #0E5736;
+				overflow: hidden;
+				border-radius:15px;
+				margin:0px auto;
+		}
+		ul{
+				margin:1px;
+				padding:1px;
+				
+		}
+		li
+		{
+				text-align: justify;
+				list-style-type:none;
+				border-bottom:2px solid #024D2B;
+				height: 70px;
+		}
+
+	</style>
+	
+	<script
+			src="https://code.jquery.com/jquery-3.4.1.min.js"
+			integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+			crossorigin="anonymous">
+	</script>
+
+	<script type="text/javascript">
+		var interval;
+		function startTicker() {
+			$('#news li:first').slideUp(function(){
+				$(this).appendTo('#news').slideDown();
+			});
+		}
+
+		function stopTicker() {
+			clearInterval(interval);
+		}
+
+		$(document).ready(function(){
+			interval = setInterval(startTicker, 1000);
+			$('#news').hover(function(){
+				stopTicker();
+			}, function(){
+				setInterval(startTicker, 1000);
+			});
+		});
+		
+	</script>
+			 
+</head>
+<body>
+	<div class="ticker">
+		<ul id="news">
+						<li id="1">The <b>first</b> piece of news. The <b>first</b> piece of news. The <b>first</b> piece of news. The <b>first</b> piece of news. The <b>first</b> piece of news.</li>
+						<li id="2">The <b>second</b> piece of news. The <b>second</b> piece of news. The <b>second</b> piece of news. The <b>second</b> piece of news. The <b>second</b> piece of news.</li>
+						<li id="3">The <b>third</b> piece of news. The <b>third</b> piece of news. The <b>third</b> piece of news. The <b>third</b> piece of news. The <b>third</b> piece of news.</li>
+						<li id="4">The <b>fourth</b> piece of news. The <b>fourth</b> piece of news. The <b>fourth</b> piece of news.</li>
+						<li id="5">The <b>fifth</b> piece of news. The <b>fifth</b> piece of news. The <b>fifth</b> piece of news.</li>
+		</ul>
+		</div>
+</body>
+</html>
