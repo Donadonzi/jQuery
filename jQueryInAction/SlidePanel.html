@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Donz jQuery in Action</title>
+
+	<style>
+			body{
+				width:500px;
+				margin:0px auto;
+			}
+			#content
+			{
+				background-color:#EDA4C8;
+				height:200px;
+				display:none;		
+			}
+			#panel
+			{
+				margin:0px;
+				border-top:solid 2px #5C0B33;
+			}
+			.message
+			{
+				background:#AB1560 url(images/down.gif) no-repeat 110px 10px;
+				width:120px;
+				height:30px;
+				display:block;
+				padding:5px;
+				margin:0px auto;
+				color:white;
+				text-align:center;
+				border-radius:10px;
+				cursor:pointer;
+			}
+			.changeImage
+			{
+				background-image:url(images/close.png);
+			}
+
+	</style>
+	
+	<script
+			src="https://code.jquery.com/jquery-3.4.1.min.js"
+			integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+			crossorigin="anonymous">
+	</script>
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('#panel img:first').show();
+			$('#panel img:last').hide();
+			$('.message').click(function(){
+				$('#content').slideToggle(1000);
+				$('.icon').toggle();
+			});
+
+			// She did the icon part differently:
+			// $(document).ready(function(){
+			// 		$(".message").click(function () {
+			// 		$("#content").slideToggle("slow");
+			// 		$(this).toggleClass("changeImage");
+			// 	});
+			// });
+		
+		});
+			
+	</script>
+			 
+</head>
+<body>
+	<div id="content">
+		This is a panel. This is a panel.
+		This is a panel. This is a panel.
+		This is a panel. This is a panel.
+		This is a panel. This is a panel.
+		This is a panel. This is a panel. 
+	</div>
+	<p id="panel">
+		<span class="message">Slide Panel
+			<img class="icon" src="down.gif">
+			<img class="icon" src="close.png">
+		</span>	
+	</p>
+</body>
+</html>
