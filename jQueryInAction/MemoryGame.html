@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Donz Memory Game</title>
+
+	<style>
+		body {
+			background-color: gray;
+		}
+	
+		#container {
+			margin: 0px auto;
+			width: 640px;
+			font: 20px Verdana;
+		}
+	
+		#information {
+			text-align: center;
+			margin: 20px;
+		}
+	
+		.text {
+			color: white;
+		}
+	
+		.button {
+			background: black;
+			color: white;
+			margin: 10px;
+			padding: 5px 10px;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+	
+		#images div {
+			float: left;
+			width: 100px;
+			height: 100px;
+			margin: 5px;
+			padding: 5px;
+			border: 2px solid #018517;
+			border-radius: 10px;
+			cursor: pointer;
+			background: white;
+		}
+	
+		#images div img {
+			display: none;
+			width: 100%;
+			height: 100%;
+		
+		}
+	
+		</style>
+	
+	<script
+			src="https://code.jquery.com/jquery-3.4.1.min.js"
+			integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+			crossorigin="anonymous">
+	</script>
+
+	<script type="text/javascript">
+		var imageArray = [
+					  "images/memoryGame/flo1.jfif",
+					  "images/memoryGame/flo2.jfif",
+					  "images/memoryGame/flo3.jfif",
+					  "images/memoryGame/flo4.jfif",
+					  "images/memoryGame/flo5.jfif",
+					  "images/memoryGame/flo6.jfif",
+					  "images/memoryGame/flo7.jfif",
+					  "images/memoryGame/flo8.jfif",
+					  "images/memoryGame/flo9.jfif",
+					  "images/memoryGame/flo10.jfif"
+				];
+
+		function shuffleImages() {
+			var len = imageArray.length * 2;
+			var extImgArray = $.merge($.merge([], imageArray), imageArray);
+			var currentDiv = $('#images div:first-child');
+
+			for (var i = 0; i < len; i++) {
+				var randomNum = Math.round(Math.random()*(extImgArray.length-1));
+				$('#' + currentDiv.attr('id') + ' img').attr('src', extImgArray[randomNum]);
+				extImgArray.splice(randomNum, 1);
+				currentDiv = currentDiv.next();
+			}	
+		};
+
+		var imgSource = '';
+		var divID = '';
+		var imgFound, moves = 0;
+		function openCard() {
+				var id = $(this).attr('id');
+				if ($('#' + id + ' img').is(':hidden')) {
+					$('#' + id + ' img').show('slow');
+					if (imgSource === '') {
+						divID = id;
+						imgSource = $('#' + id + ' img').attr('src');
+					} else {
+						currentOpened = $('#' + id + ' img').attr('src');
+						if (currentOpened !== imgSource) {
+							setTimeout(function () {
+								$('#' + id + ' img').hide('slow');
+								$('#' + divID + ' img').hide('slow');
+								divID = '';
+								imgSource = '';
+						}, 1000);
+					} else {
+							imgFound++;
+							divID = '';
+							imgSource = '';
+						}
+					
+					moves++;
+					$('#moves').html(moves);
+					if (imgFound === imageArray.length) {
+						setTimeout(function () {
+							alert('You completed the game with ' + moves + ' clicks!');
+						}, 1000);
+					}
+
+				}
+			}
+		};
+
+		function resetGame() {
+			shuffleImages();
+			moves = 0;
+			imgFound = 0;
+			divID = '';
+			imgSource = '';
+			$("#images div img").hide();
+			$("#moves").html(moves);
+		};
+
+		$(document).ready(function(){
+			for (var i = 1; i < 3; i++) {
+				$.each(imageArray, function(index, item){
+					$('#images').append("<div id=card" + i + index + "><img src=" + item + "></div>");
+				});
+			}
+
+			shuffleImages();
+			$('#images div').click(openCard);
+
+
+		});
+			
+	</script>
+			 
+</head>
+<body>
+	<div id="container">
+		<div id="information">
+			<span class="text">Moves: </span>
+			<span id="moves" class="text">0</span>
+			<a class="button" onclick="resetGame();">Reset</a>
+		</div>
+		<div id="images">
+			
+
+		</div>
+	</div>
+</body>
+</html>
