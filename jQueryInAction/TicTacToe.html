@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Donz Tic Tac Toe</title>
+
+	<style>
+		#grid {
+			width: 400px;
+			margin: 30px auto;
+		}
+	
+		.square {
+			border: 1px solid black;
+			width: 80px;
+			height: 80px;
+			padding: 20px;
+			text-align: center;
+			font-size: 50px;
+			float: left;
+		}
+	
+		#s1,
+		#s4,
+		#s7 {
+			border-left: none;
+		}
+	
+		#s1,
+		#s2,
+		#s3 {
+			border-top: none;
+		}
+	
+		#s3,
+		#s6,
+		#s9 {
+			border-right: none;
+		}
+	
+		#s7,
+		#s8,
+		#s9 {
+			border-bottom: none;
+		}
+	
+		#container {
+			clear: left;
+			text-align: center;
+			display: none;
+		}
+	
+		#result,
+		#btnPlay {
+			background: black;
+			color: white;
+			font-size: 30px;
+			padding: 5px;
+			margin-top: 20px;
+			height: 50px;
+		}
+	
+		.x-mark::after {
+			content: "X";
+			color: orange;
+		}
+	
+		.o-mark::after {
+			content: "O";
+			color: gray;
+		}
+	
+		#result.win {
+			background: green;
+		}
+	
+		#result.lose {
+			background: red;
+		}
+	
+		#result.draw {
+			background: gray;
+		}
+	</style>
+	
+	<script
+			src="https://code.jquery.com/jquery-3.4.1.min.js"
+			integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+			crossorigin="anonymous">
+	</script>
+
+	<script type="text/javascript">
+		var finished;
+
+		$(document).ready(function(){
+
+			finished = false;
+
+			for (var i = 1; i <= 9; i++) {
+				$('#grid').append('<div id=s' + i + ' class="square" data-position="' + i + '" ></div>');
+			}
+
+			$('.square').on('click', yourTurn);
+			
+		});
+
+		function yourTurn() {
+				if (!finished) {
+					if ($(this).attr('class').indexOf('marked') < 0) {
+						$(this).addClass('x-mark');
+						$(this).addClass('marked');
+						finished = findWinner($(this).data('position'), 'x-mark');
+						computerTurn();
+					}	
+					else {
+						alert('This square is already marked!');
+					}
+				} 
+					else if(finished) {
+					alert('The game is over!');
+				}
+				if ($('.marked').length === 9 && !finished) {
+						displayResult('Draw', 'draw');
+				}	
+		}
+		 
+
+		function computerTurn() {
+			var unmarkedSquares = $('.square:not(.marked)');
+			var randomPosition = Math.floor(Math.random()*unmarkedSquares.length);
+			var randomSquare = unmarkedSquares[randomPosition];
+			$(randomSquare).addClass('o-mark marked');
+			finished = findWinner($(randomSquare).data('position'), 'o-mark');
+		}
+
+		function findWinner(position, mark) {
+			var winningPositions = [[1,2,3],[1,4,7],[1,5,9],[2,5,8],[3,6,9],[3,5,7],[4,5,6],[7,8,9]];
+
+			if($(".x-mark").length >= 3 || $(".o-mark").length >= 3) {
+				$.each(winningPositions, function(i, winningArray) {
+					if (winningArray.indexOf(position) > 0) {
+						cellsInARow = 0;
+						$.each(winningArray, function(j, item) {
+							var currentMark = $('#s' + item).attr('class');
+							if (currentMark.indexOf(mark) > 0) {
+								cellsInARow++;
+								if(cellsInARow === 3) {
+									finished = true;
+									if (mark === 'x-mark') {
+										var result = 'You won!'
+										var status = 'win';
+									}
+									else {
+										var result = 'You lost :('
+										var status = 'lose';
+									}
+									displayResult(result, status);
+								}
+							}
+						});
+					}
+				});
+			}
+			return finished;	
+		}
+
+		function displayResult(result, status) {
+			$('#container').show();
+			$('#result').text(result);
+			$('#result').addClass(status);
+		}
+
+		function resetGame() {
+			$('#container').hide();
+			$('.square').removeClass('marked x-mark o-mark');
+			$('#result').removeClass();
+			finished = false;
+		}
+		
+	</script>
+			 
+</head>
+<body>
+	<div id="grid"></div>
+	<div id="container">
+		<button id="result" disabled>Test</button>
+		<button id="btnPlay" onclick="resetGame();">Play</button>
+	</div>
+</body>
+</html>
