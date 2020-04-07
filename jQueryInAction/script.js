@@ -1,93 +1,87 @@
-var imgSource = "";
-	var divId = "";
-	var imgFound = 0;
-	var moves = 0;
-	var imageArray = [
-					  "images/flo1.jfif",
-					  "images/flo2.jfif",
-					  "images/flo3.jfif",
-					  "images/flo4.jfif",
-					  "images/flo5.jfif",
-					  "images/flo6.jfif",
-					  "images/flo7.jfif",
-					  "images/flo8.jfif",
-					  "images/flo9.jfif",
-					  "images/flo10.jfif",
-					  ];
-	function ShuffleImages()
-	{
-		var len = imageArray.length*2;
-		var imgArr = new Array();
-		imgArr = $.merge($.merge([], imageArray), imageArray);
-		var currentDiv = $("#images div:first-child");
-		for(var z = 0;z < len;z++)
-		{
-			var randomNum = Math.round(Math.random()*(imgArr.length-1));
-			$("#" + currentDiv.attr("id") + " img").attr("src", imgArr[randomNum]);
-			imgArr.splice(randomNum, 1);
-			currentDiv = currentDiv.next();
-		}
-	}
+
+   var images, thumbWidth;
+   var count = 0;
+	var imagesArray = ["images/sce1.jpeg",
+					   "images/sce2.jpeg",
+					   "images/sce3.jpeg",
+					   "images/sce5.jpeg",
+					   "images/sce6.jpeg",
+					   "images/sce7.jpeg",
+					   "images/sce8.jpeg",
+					   ];
 	
-	function OpenCard()
-	{
-		var id = $(this).attr("id");
-		if ($("#" + id + " img").is(":hidden"))
-		{
-			$("#" + id + " img").show("slow");
-			if (imgSource == "")
-			{
-				divId = id;
-			  imgSource = $("#" + id + " img").attr("src");
-			}
-			else
-			{
-				currentOpened = $("#" + id + " img").attr("src");
-				if (imgSource != currentOpened)
-				{
-					setTimeout(function(){
-							$("#" + id + " img").hide("slow");
-							$("#" + divId + " img").hide("slow");
-							divId = "";
-					        imgSource = "";
-						}, 600);
-					
-				}
-				else
-				{
-					divId = "";
-					imgSource = "";
-					imgFound++;
-				}
-			}
-			moves++;
-			$("#moves").html(moves);
-			if (imageArray.length == imgFound)
-			{
-				setTimeout(function(){
-					alert("YES !!! You completed the game with " + moves + " clicks");
-				}, 1000);
-			}
-		}
-	}
-	
-	function ResetGame()
-	{
-		ShuffleImages();
-		moves = 0;
-		$("#moves").html(moves);
-		$("#images div img").hide();
-		imgFound = 0;
-		imgSource = "";
-		divId = "";
-	}
 	$(document).ready(function(){
-		for(var i=1;i<3;i++)
-		{
-			$.each(imageArray, function(index, value){
-				$("#images").append("<div id=card" + i + index + "><img src=" + value + " /></div>");
-			})
-		}
-		ShuffleImages();
-		$("#images div").click(OpenCard);
-	});
+		$.each(imagesArray, function(index, value){
+			$("#upper").append("<img data-id='img" + index + "' src='" + value + "' />");
+			$("#thumbs").append("<a href='#' class='thumb' data-id='img" + index + "'> <img src='" + value + "' /></a>");
+		});
+		
+		//$("#upper").append($("img[data-id=img0]"));
+		images = $("#upper").find("img");
+		thumbWidth = $(".thumb").css("width");
+		thumbWidth = thumbWidth.slice(0, (thumbWidth.length - 2));
+		
+		updateArrows();
+		
+		$(".thumb").on("click", function(){
+			var thumbId = $(this).attr("data-id");
+			//$("img[data-id=" + thumbId + "]").insertAfter( $("#upper img:last"));
+
+			$.each(images, function(index, value){
+			   if (thumbId == $(value).attr("data-id")) {
+				  $(value).css("z-index", "1")
+			   }
+			   else
+			   {
+				  $(value).css("z-index", "-1")
+			   }
+			});
+		 });
+		
+	  $(".arrow").on("click", function(){
+		 var arrowId = $(this).attr("id");		 
+		 var scrollString;
+		 
+		 if (arrowId == "left")
+		 {
+			scrollString = "+=";
+			count--;
+		 }
+		 else
+		 {
+			scrollString = "-=";
+			count++;
+		 }
+		 
+		 $("#thumbs").animate({
+			marginLeft: scrollString + thumbWidth + "px"}, "fast", updateArrows);
+		 alert(marginLeft);		 
+	  });	  
+   });
+	
+	function updateArrows()
+	{
+	  var totalNoImages = images.length;
+	  var galleryWidth = $("#gallery").css("width");
+	  galleryWidth = galleryWidth.slice(0, (galleryWidth.length - 2));
+	  noThumbsAtATime = galleryWidth/thumbWidth;
+	  var lastCount = totalNoImages - noThumbsAtATime;
+	  
+	  if (count == lastCount)
+	  {
+		$("#right").addClass("disabled");
+	  }
+	  else
+	  {
+		 $("#right").removeClass("disabled");
+	  }
+	  
+	  if (count == 0)
+	  {
+		 $("#left").addClass("disabled");
+	  }	  
+	  else
+	  {
+		 $("#left").removeClass("disabled");
+	  }
+	}

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Donz Sliding Gallery</title>
+
+	<style>
+		#gallery {
+			width: 450px;
+			margin: 25px auto;
+			position: relative;
+		}
+	
+		#upper {
+			height: 300px;
+			margin-bottom: 10px;
+		}
+	
+		#upper img {
+			width: 100%;
+			position: absolute;
+		}
+	
+		.thumb img {
+			width: 150px;
+			height: 120px;
+		}
+	
+		#lower {
+			overflow: hidden;
+		}
+	
+		.arrow {
+			position: absolute;
+			bottom: 45px;
+		}
+	
+		#left {
+			left: -60px;
+			transform: rotate(180deg);
+		}
+	
+		#right {
+			right: -60px;
+		}
+	
+		#thumbs {
+			white-space: nowrap;
+		}
+	
+		#thumbs img {
+			opacity: .6;
+		}
+	
+		#thumbs img:hover {
+			opacity: 1;
+			transition: all .5s;
+		}
+	
+		#thumbs a {
+			display: inline-block;
+		}
+	
+		.arrow.disabled {
+			display: none;
+		}
+	</style>
+	
+	<script
+			src="https://code.jquery.com/jquery-3.4.1.min.js"
+			integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+			crossorigin="anonymous">
+	</script>
+
+	<script type="text/javascript">
+		
+		var imagesArray = ["images/slidingGallery/sce1.jpg",
+				"images/slidingGallery/sce2.jpg",
+				"images/slidingGallery/sce3.jpg",
+				"images/slidingGallery/sce4.jpg",
+				"images/slidingGallery/sce5.jpg",
+				"images/slidingGallery/sce6.jpg",
+				"images/slidingGallery/sce7.jpg",
+				"images/slidingGallery/sce8.jpg",
+			];
+
+			$(document).ready(function(){
+
+				var count = 0;
+
+				$.each(imagesArray, function(index, item){
+					$('#upper').append('<img data-id="img' + index + '" src="' + item + '" />');
+					$('#thumbs').append('<a href="#" class="thumb" data-id="img' + index + '"><img src="' + item + '"></a>');
+				});
+
+				var images = $('#upper').find('img');
+				var thumbWidth = parseInt($('.thumb').css('width'));
+				updateArrows();
+
+				$('.thumb').on('click', function(){
+					var thumbID = $(this).data('id');
+					
+					$.each(images, function(index, item){
+						if (thumbID === $(item).data('id')) {
+							$(item).css('z-index', '1');
+						} 
+						else {
+							$(item).css('z-index', '-1');
+						}
+					});
+				});
+
+
+				$('.arrow').on('click', function(){
+					var whichArrow = $(this).attr('id');
+					// thumbWidth = thumbWidth.slice(0, (thumbWidth.length-2));  This is how the instructor removed the px. I prefer my way better, above.
+					var operation;
+					if (whichArrow === 'left') {
+						operation = '+=';
+						count--;
+					}
+					else {
+						operation = '-=';
+						count++;
+					}
+					console.log(count);
+					$('#thumbs').animate({marginLeft: operation + thumbWidth + 'px'}, 'fast', updateArrows);
+					
+				});
+
+				function updateArrows() {
+					var totalNoImages = images.length;
+					var galleryWidth = parseInt($('#gallery').css('width'));
+					var visibleThumbsNo = galleryWidth / thumbWidth;
+					var lastCount = totalNoImages - visibleThumbsNo;
+
+					if (count === lastCount) {
+						$('#right').addClass('disabled');
+					}
+					else {
+						$('#right').removeClass('disabled');
+					}
+					if (count === 0) {
+						$('#left').addClass('disabled');
+					}
+					else {
+						$('#left').removeClass('disabled');
+					}
+				};
+
+			});
+		
+	</script>
+			 
+</head>
+<body>
+	<div id="gallery">
+		<div id="upper"></div>
+		<div id="lower">
+			<a href="#" class="arrow" id="left"><img src="images/slidingGallery/right-arrow.png" /></a>
+			<div id="thumbs"></div>
+			<a href="#" class="arrow" id="right"><img src="images/slidingGallery/right-arrow.png" /></a>
+		</div>
+	</div>
+</body>
+</html>
