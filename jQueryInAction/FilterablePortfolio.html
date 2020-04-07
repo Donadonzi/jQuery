@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Donz Filterable Portfolio</title>
+
+	<style>
+		#container {
+			width: 750px;
+			height: 580px;
+			border: 2px solid gray;
+			margin: 0px auto;
+			border-radius: 20px;
+		}
+	
+		#filter {
+			list-style-type: none;
+		}
+	
+		#filter li {
+			float: left;
+			font-size: 25px;
+			border-right: 2px solid gray;
+			margin-right: 10px;
+			padding-right: 10px;
+		}
+	
+		#filter li:last-child {
+			border-right: none;
+		}
+	
+		#filter li a {
+			color: silver;
+			text-decoration: none;
+		}
+	
+		#filter li a:hover {
+			color: gray;
+		}
+	
+		#filter li.current a {
+			color: black;
+			font-weight: bold;
+			text-decoration: underline;
+		}
+	
+		#portfolio {
+			list-style-type: none;
+			width: 680px;
+			float: left;
+		}
+	
+		#portfolio li {
+			float: left;
+			margin: 5px;
+			padding: 5px;
+			text-align: center;
+			width: 200px;
+			border: 1px solid gray;
+			border-radius: 2px;
+			font-size: 20px;
+		}
+	
+		#portfolio img {
+			width: 200px;
+			height: 120px;
+		}
+	</style>
+	
+	<script
+			src="https://code.jquery.com/jquery-3.4.1.min.js"
+			integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+			crossorigin="anonymous">
+	</script>
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+
+			$('#filter a').click(function(){
+				$('#filter .current').removeClass('current');
+				$(this).parent().addClass('current');
+				var filterValue = $(this).text().toLowerCase().replace(' ', '_');
+				$('#portfolio li').fadeIn(10); // This is for reloading the previously hidden elements
+				if (filterValue !== 'all') {
+					$('#portfolio li').not('.' + filterValue).fadeOut(10);
+				}	
+			});
+
+		});
+	</script>
+			 
+</head>
+<body>
+	<div id="container">
+		<ul id="filter">
+			<li class="current"><a href="#">All</a></li>
+			<li><a href="#">Design</a></li>
+			<li><a href="#">Product</a></li>
+			<li><a href="#">Coming Soon</a></li>
+		</ul>
+		<ul id="portfolio">
+			<li class="product"><a href="#"><img src="images/filterablePortfolio/acc.jpg" />Accounting</a></li>
+			<li class="design"><a href="#"><img src="images/filterablePortfolio/christ.jpg" />College</a></li>
+			<li class="product"><a href="#"><img src="images/filterablePortfolio/builders.jpg" />Builders</a></li>
+			<li class="design coming_soon "><a href="#"><img src="images/filterablePortfolio/gaha.jpg" />Coming Soon</a></li>
+			<li class="product"><a href="#"><img src="images/filterablePortfolio/campus.jpg" />Campus</a></li>
+			<li class="design"><a href="#"><img src="images/filterablePortfolio/consultancy.jpg" />Crypters</a></li>
+			<li class="product"><a href="#"><img src="images/filterablePortfolio/hr.jpg" />HR</a></li>
+			<li class="design coming_soon"><a href="#"><img src="images/filterablePortfolio/ozone.jpg" />Coming Soon</a></li>
+			<li class="product"><a href="#"><img src="images/filterablePortfolio/inventory.jpg" />Inventory</a></li>
+		</ul>
+	</div>
+</body>
+</html>
