@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Donz Flying Bird Game</title>
+
+	<style>
+		body {
+			background: silver;
+		}
+	
+		button {
+			font-size: 30px;
+			border-radius: 10px;
+		}
+	
+		#restarting,
+		#initial,
+		#details {
+			text-align: center;
+			font-size: 30px;
+		}
+	
+		#btnRestart,
+		#details {
+			display: none;
+		}
+	
+		#container {
+			height: 400px;
+			width: 90%;
+			background-color: white;
+			margin: 30px auto;
+			position: relative;
+			overflow: hidden;
+			display: none;
+		}
+	
+		#bird {
+			background: url("images/bird.png");
+			background-size: contain;
+			background-repeat: no-repeat;
+			height: 40px;
+			width: 45px;
+			position: absolute;
+			top: 20%;
+			left: 180px;
+		}
+	
+		.pipe {
+			width: 50px;
+			background-color: gray;
+			height: 130px;
+			position: absolute;
+			right: -50px;
+		}
+	
+		#pipe1 {
+			top: 0px;
+		}
+	
+		#pipe2 {
+			bottom: 0px;
+		}
+	</style>
+	
+	<script
+			src="https://code.jquery.com/jquery-3.4.1.min.js"
+			integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+			crossorigin="anonymous">
+	</script>
+
+	<script type="text/javascript">
+
+
+		$(document).ready(function(){
+			
+			var gameId;
+			var speed = 4;
+			var score = 0;
+			var scoreUpdated = false;
+			var containerWidth = parseInt($('#container').width());
+			var containerHeight = parseInt($('#container').height());
+			var initialPosition = parseInt($('.pipe').css('right'));
+			var initialHeight = parseInt($('.pipe').css('height'));
+			var bird = $('#bird');
+			var movingUp = false;
+			var gameOver = false;
+			
+			
+			$("#btnStart").click(function(){
+				$("#initial").hide();
+				$("#container").show();
+				$("#details").show();
+
+				var game = function() {
+					var currentPosition = parseInt($('.pipe').css('right'));
+
+					// if (collision(bird, $("#pipe1")) || 
+					// 	  collision(bird, $("#pipe2")) || 
+					// 	  parseInt(bird.css("top")) <= 0 ||  
+					// 	  parseInt(bird.css("top")) >= containerHeight - bird.height()) {
+								
+					// 			console.log('stopGame');
+					// 			stopGame();
+								
+					// }
+					if(collision(bird, $("#pipe1")) || collision(bird, $("#pipe2")) || parseInt(bird.css("top"))<=0 ||  parseInt(bird.css("top")) >= containerHeight-bird.height())
+					{
+							stopGame();
+					}
+
+					else {
+							if (parseInt(bird.css('left')) > containerWidth - currentPosition) {
+								if (!scoreUpdated) {
+									score++;
+									$('#score').text(score);
+									scoreUpdated = true;
+								}
+							}
+							if (currentPosition > containerWidth) {
+
+									currentPosition = initialPosition;
+									var changeHeight = Math.floor(Math.random() * 100);
+									$('#pipe1').css('height', initialHeight + changeHeight);
+									$('#pipe2').css('height', initialHeight - changeHeight);
+									currentPosition = initialPosition;
+									speed++;
+									scoreUpdated = false;
+							}
+							$('.pipe').css('right', currentPosition + speed);
+
+							if (!movingUp) {
+								moveDown();
+								console.log('moveDown');
+							}
+							gameId = requestAnimationFrame(game);
+						}
+						gameId = requestAnimationFrame(game);
+					}
+			});
+
+			function collision(duck, pipe) {
+			
+				var birdLeft = duck.offset().left;
+				var birdTop = duck.offset().top;
+				var birdWidth = bird.width();
+				var birdHeight = bird.height();
+				var birdRight = birdLeft + birdWidth;
+				// console.log(birdRight + " : " + duck.offset().right);
+				var birdBottom = birdTop + birdHeight;
+				// console.log(birdBottom + " : " + duck.offset().bottom);
+				var pipeLeft = pipe.offset().left;
+				var pipeTop = pipe.offset().top;
+				var pipeWidth = pipe.width();
+				var pipeHeight = pipe.height();
+				var pipeRight = pipeLeft + pipeWidth;
+				var pipeBottom = pipeTop + pipeHeight;
+				if(birdBottom < pipeTop || birdTop > pipeBottom || birdLeft > pipeRight || birdRight < pipeLeft)
+						return false;
+				return true;            
+			}
+
+		function stopGame() {
+				cancelAnimationFrame(gameId);
+				gameOver = true;
+				$('#btnRestart').show();
+			}
+
+			$(document).on('keydown', function(e) {
+				var key = e.keyCode;
+				if (key == 32 && !movingUp && !gameOver) {
+					movingUp = requestAnimationFrame(moveUp);
+				}
+			})
+
+			$(document).on('keyup', function(e){
+				var key = e.keyCode;
+				if (key == 32){
+					cancelAnimationFrame(movingUp);
+					movingUp = false;
+				}
+			})
+
+			function moveDown() {
+				bird.css('top', parseInt(bird.css('top')) + 4);
+			}
+
+			function moveUp() {
+				if (!gameOver) {
+					bird.css('top', parseInt(bird.css('top')) - 6);
+					movingUp = requestAnimationFrame(moveUp);
+				}	
+			}
+
+			
+
+			
+
+			$('#btnRestart').click(function(){
+				location.reload();
+			})
+			
+			
+
+
+
+
+
+		});	
+		
+	</script>
+			 
+</head>
+<body>
+	<div id="restarting">
+		<button id="btnRestart">Restart</button>
+	</div>
+	<div id="initial">
+		<p>Player: Use Space Bar to Control the Bird</p>
+		<button id="btnStart">Start</button>
+	</div>
+	<div id="container">
+		<div id="bird"></div>
+		<div id="pipe1" class="pipe"></div>
+		<div id="pipe2" class="pipe"></div>
+	</div>
+	<div id="details">
+		<b>Score: </b><span id="score">0</span>
+	</div>
+</body>
+</html>
