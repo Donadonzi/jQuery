@@ -73,45 +73,39 @@
 
 	<script type="text/javascript">
 
+		$(document).ready(function () {
 
-		$(document).ready(function(){
-			
-			var gameId;
-			var speed = 4;
-			var score = 0;
-			var scoreUpdated = false;
-			var containerWidth = parseInt($('#container').width());
-			var containerHeight = parseInt($('#container').height());
-			var initialPosition = parseInt($('.pipe').css('right'));
-			var initialHeight = parseInt($('.pipe').css('height'));
-			var bird = $('#bird');
-			var movingUp = false;
-			var gameOver = false;
-			
-			
-			$("#btnStart").click(function(){
-				$("#initial").hide();
-				$("#container").show();
-				$("#details").show();
+				var gameId;
+				var speed = 4;
+				var score = 0;
+				var scoreUpdated = false;
+				var containerWidth = parseInt($('#container').width());
+				var containerHeight = parseInt($('#container').height());
+				var initialPosition = parseInt($('.pipe').css('right'));
+				var initialHeight = parseInt($('.pipe').css('height'));
+				var bird = $('#bird');
+				var movingUp = false;
+				var gameOver = false;
 
-				var game = function() {
-					var currentPosition = parseInt($('.pipe').css('right'));
 
-					// if (collision(bird, $("#pipe1")) || 
-					// 	  collision(bird, $("#pipe2")) || 
-					// 	  parseInt(bird.css("top")) <= 0 ||  
-					// 	  parseInt(bird.css("top")) >= containerHeight - bird.height()) {
-								
-					// 			console.log('stopGame');
-					// 			stopGame();
-								
-					// }
-					if(collision(bird, $("#pipe1")) || collision(bird, $("#pipe2")) || parseInt(bird.css("top"))<=0 ||  parseInt(bird.css("top")) >= containerHeight-bird.height())
-					{
-							stopGame();
-					}
+				$("#btnStart").click(function () {
+					$("#initial").hide();
+					$("#container").show();
+					$("#details").show();
 
-					else {
+					var game = function () {
+
+						var currentPosition = parseInt($('.pipe').css('right'));
+
+						if (collision(bird, $("#pipe1")) || 
+							  collision(bird, $("#pipe2")) || 
+							  parseInt(bird.css("top")) <= 0 ||  
+							  parseInt(bird.css("top")) >= containerHeight - bird.height()) {
+
+									stopGame();
+						}
+						
+						else {
 							if (parseInt(bird.css('left')) > containerWidth - currentPosition) {
 								if (!scoreUpdated) {
 									score++;
@@ -120,95 +114,84 @@
 								}
 							}
 							if (currentPosition > containerWidth) {
-
-									currentPosition = initialPosition;
-									var changeHeight = Math.floor(Math.random() * 100);
-									$('#pipe1').css('height', initialHeight + changeHeight);
-									$('#pipe2').css('height', initialHeight - changeHeight);
-									currentPosition = initialPosition;
-									speed++;
-									scoreUpdated = false;
+							
+								currentPosition = initialPosition;
+								var changeHeight = Math.floor(Math.random() * 100);
+								$('#pipe1').css('height', initialHeight + changeHeight);
+								$('#pipe2').css('height', initialHeight - changeHeight);							
+								scoreUpdated = false;
+								speed++;
 							}
 							$('.pipe').css('right', currentPosition + speed);
 
 							if (!movingUp) {
 								moveDown();
-								console.log('moveDown');
 							}
+						}
+
 							gameId = requestAnimationFrame(game);
 						}
-						gameId = requestAnimationFrame(game);
-					}
-			});
 
-			function collision(duck, pipe) {
-			
-				var birdLeft = duck.offset().left;
-				var birdTop = duck.offset().top;
-				var birdWidth = bird.width();
-				var birdHeight = bird.height();
-				var birdRight = birdLeft + birdWidth;
-				// console.log(birdRight + " : " + duck.offset().right);
-				var birdBottom = birdTop + birdHeight;
-				// console.log(birdBottom + " : " + duck.offset().bottom);
-				var pipeLeft = pipe.offset().left;
-				var pipeTop = pipe.offset().top;
-				var pipeWidth = pipe.width();
-				var pipeHeight = pipe.height();
-				var pipeRight = pipeLeft + pipeWidth;
-				var pipeBottom = pipeTop + pipeHeight;
-				if(birdBottom < pipeTop || birdTop > pipeBottom || birdLeft > pipeRight || birdRight < pipeLeft)
+					gameId = requestAnimationFrame(game);	
+				});
+
+				
+
+				function collision(duck, pipe) {
+					var birdLeft = duck.offset().left;
+					var birdTop = duck.offset().top;
+					var birdWidth = bird.width();
+					var birdHeight = bird.height();
+					var birdRight = birdLeft + birdWidth;
+					var birdBottom = birdTop + birdHeight;
+					var pipeLeft = pipe.offset().left;
+					var pipeTop = pipe.offset().top;
+					var pipeWidth = pipe.width();
+					var pipeHeight = pipe.height();
+					var pipeRight = pipeLeft + pipeWidth;
+					var pipeBottom = pipeTop + pipeHeight;
+					if (birdBottom < pipeTop || birdTop > pipeBottom || birdLeft > pipeRight || birdRight < pipeLeft)
 						return false;
-				return true;            
-			}
-
-		function stopGame() {
-				cancelAnimationFrame(gameId);
-				gameOver = true;
-				$('#btnRestart').show();
-			}
-
-			$(document).on('keydown', function(e) {
-				var key = e.keyCode;
-				if (key == 32 && !movingUp && !gameOver) {
-					movingUp = requestAnimationFrame(moveUp);
+					return true;
 				}
-			})
 
-			$(document).on('keyup', function(e){
-				var key = e.keyCode;
-				if (key == 32){
-					cancelAnimationFrame(movingUp);
-					movingUp = false;
+				function stopGame() {
+					cancelAnimationFrame(gameId);
+					gameOver = true;
+					$('#btnRestart').show();
 				}
-			})
 
-			function moveDown() {
-				bird.css('top', parseInt(bird.css('top')) + 4);
-			}
+				$(document).on('keydown', function (e) {
+					var key = e.keyCode;
+					if (key == 32 && !movingUp && !gameOver) {
+						movingUp = requestAnimationFrame(moveUp);
+					}
+				});
 
-			function moveUp() {
-				if (!gameOver) {
-					bird.css('top', parseInt(bird.css('top')) - 6);
-					movingUp = requestAnimationFrame(moveUp);
-				}	
-			}
+				$(document).on('keyup', function (e) {
+					var key = e.keyCode;
+					if (key == 32) {
+						cancelAnimationFrame(movingUp);
+						movingUp = false;
+					}
+				});
 
-			
+				function moveDown() {
+					bird.css('top', parseInt(bird.css('top')) + 4);
+				}
 
-			
+				function moveUp() {
+					if (!gameOver) {
+						bird.css('top', parseInt(bird.css('top')) - 6);
+						movingUp = requestAnimationFrame(moveUp);
+					}
+				}
 
-			$('#btnRestart').click(function(){
-				location.reload();
-			})
-			
-			
+				$('#btnRestart').click(function () {
+					location.reload();
+				});
 
-
-
-
-
-		});	
+			});
 		
 	</script>
 			 

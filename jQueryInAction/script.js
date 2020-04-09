@@ -55,9 +55,9 @@ $(document).ready(function(){
 			var birdWidth = bird.width();
 			var birdHeight = bird.height();
 			var birdRight = birdLeft + birdWidth;
-			// console.log(birdRight + " : " + duck.offset().right);
+			console.log(birdRight + " : " + duck.offset().right);
 			var birdBottom = birdTop + birdHeight;
-			// console.log(birdBottom + " : " + duck.offset().bottom);
+			console.log(birdBottom + " : " + duck.offset().bottom);
 			var pipeLeft = pipe.offset().left;
 			var pipeTop = pipe.offset().top;
 			var pipeWidth = pipe.width();
@@ -97,11 +97,10 @@ $(document).ready(function(){
 			}
 	})
 	
-	
-	
-
-
-	
+	function moveDown()
+	{
+			bird.css("top", parseInt(bird.css("top")) + 4);
+	}
 	
 	 function moveUp()
 	{
