@@ -7,12 +7,15 @@
 
 	<style>
 		body {
-			background: silver;
+			background: #3a9ee0;
+			font-family: sans-serif;
 		}
 	
 		button {
 			font-size: 30px;
 			border-radius: 10px;
+			background-color: yellow;
+			padding: 1rem;
 		}
 	
 		#restarting,
@@ -28,7 +31,7 @@
 		}
 	
 		#container {
-			height: 400px;
+			height: 70vh;
 			width: 90%;
 			background-color: white;
 			margin: 30px auto;
@@ -50,8 +53,8 @@
 	
 		.pipe {
 			width: 50px;
-			background-color: gray;
-			height: 130px;
+			background-color: #179e1e;
+			height: 24vh;
 			position: absolute;
 			right: -50px;
 		}
@@ -62,6 +65,10 @@
 	
 		#pipe2 {
 			bottom: 0px;
+		}
+
+		#details {
+			color: yellow;
 		}
 	</style>
 	
@@ -110,6 +117,7 @@
 								if (!scoreUpdated) {
 									score++;
 									$('#score').text(score);
+									$('#details').animate({fontSize: "+=5px"}).animate({fontSize: "-=5px"});
 									scoreUpdated = true;
 								}
 							}
@@ -191,6 +199,8 @@
 					location.reload();
 				});
 
+				
+
 			});
 		
 	</script>
@@ -201,7 +211,7 @@
 		<button id="btnRestart">Restart</button>
 	</div>
 	<div id="initial">
-		<p>Player: Use Space Bar to Control the Bird</p>
+		<p>Use The Space Bar to Control the Bird</p>
 		<button id="btnStart">Start</button>
 	</div>
 	<div id="container">
