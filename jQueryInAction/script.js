@@ -3,4 +3,6 @@ $(document).ready(function(){
 			e.stopPropagation();
 			$(this).toggleClass("close open");
 	});
+
+	
 });

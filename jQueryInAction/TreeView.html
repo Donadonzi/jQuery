@@ -39,10 +39,15 @@
 
 	<script type="text/javascript">
 		$(document).ready(function(){
+
 			$('#treeview .open').click(function(e){
 				e.stopPropagation();
 				$(this).toggleClass('open close');
+				
+				$(this).find('.close').toggleClass('open close');
+				
 			});
+
 		});
 			
 	</script>
