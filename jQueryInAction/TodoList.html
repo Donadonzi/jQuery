@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Donz To Do List</title>
+
+	<style>
+		body {
+			font-family: sans-serif;
+		}
+
+		h2 {
+			text-align: center;
+			color: grey;
+			margin: 15px auto;
+		}
+
+		#list p {
+			width: 500px;
+			margin: 0 auto;
+			font-size: 18px;
+			padding: 20px;
+			box-shadow: 0 5px 5px rgba(0,0,0, .2);
+
+		}
+
+		.close {
+			float: right;
+			cursor: pointer;	
+		}
+		.close:hover {
+			color: red;
+		}
+
+		#additem {
+			width: 400px;
+			height: 60px;
+			margin: 20px auto;
+		}
+		#item:focus {
+			outline-color: #b48eb4;
+		}
+
+		#item {
+			background-color: #ebe7e7;
+			width: 300px;
+			height: 40px;
+			margin: 4px;
+			padding: 10px;
+			font-size: 16px;
+		}
+
+		#btnAdd {
+			width: 50px;
+			height: 40px;
+			color: white;
+			background-color: #2cafaf;
+			display: inline-block;
+			font-size: 30px;
+			cursor: pointer;
+		}
+
+	</style>
+	
+	<script
+			src="https://code.jquery.com/jquery-3.4.1.min.js"
+			integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+			crossorigin="anonymous">
+	</script>
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+
+			$('#btnAdd').click(function(){
+				var itemToAdd = $('#item').val();
+				if (itemToAdd != '') {
+					$('#list').append(`<p><input type="checkbox"><span>${itemToAdd}</span><span class="close">X</span></p>`);
+					$('#item').val('');
+				}
+			});
+
+			$('body').on('click', '.close', function(){
+				$(this).parent().remove();
+			});
+
+
+		});
+			
+	</script>
+			 
+</head>
+<body>
+	<h2>To Do List</h2>
+	<div class="" id="list">
+		<p>
+			<input type="checkbox">
+			<span>pay the bills</span>
+			<span class="close">X</span>
+		</p>
+		<p>
+			<input type="checkbox" checked>
+			<span>do the stuff</span>
+			<span class="close">X</span>
+		</p>
+		<p>
+			<input type="checkbox">
+			<span>paint the walls</span>
+			<span class="close">X</span>
+		</p>
+		<p>
+			<input type="checkbox" checked>
+			<span>walk the dog</span>
+			<span class="close">X</span>
+		</p>
+	</div>
+	<div class="" id="additem">
+		<input type="text" id="item" placeholder="Add a new item">
+		<button id="btnAdd">+</button>
+	</div>
+</body>
+</html>
