@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- <script type="text/javascript" src="fancybox-2.1.7/source/jquery.fancybox.js"></script>
+	<script type="text/javascript" src="fancybox-2.1.7/source/jquery.fancybox.pack.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="fancybox-2.1.7/source/jquery.fancybox.css"/> -->
+
+	<!-- Add fancyBox -->
+<link rel="stylesheet" href="/fancybox/source/jquery.fancybox.css?v=2.1.7" type="text/css" media="screen" />
+<script type="text/javascript" src="/fancybox/source/jquery.fancybox.pack.js?v=2.1.7"></script>
+
+	<title>Donz Fancy Box</title>
+
+	<style>
+		#thumbs{
+	  width:850px;
+	  height:150px;
+	  margin:200px auto;
+   }
+   #thumbs img
+   {
+	  width:150px;
+	  height:150px;
+	  border:2px solid gray;
+	  margin:5px;
+   }
+
+	</style>
+	
+	<script
+			src="https://code.jquery.com/jquery-3.4.1.min.js"
+			integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+			crossorigin="anonymous">
+	</script>
+
+	<script type="text/javascript">
+		var imgArr = ['images/f1.jpg', 'images/f2.jpg', 'images/f3.jpg', 
+									'images/f4.png', 'images/f5.jpg'];
+
+		// $(document).ready(function(){
+		// 	$.each(imgArr, function(index, item){
+		// 		$('#thumbs').append(`<a class="fancy" href="${item}"><img src="${item}" /></a>`);
+		// 		$('.fancy').fancybox();
+		// 	});
+		// });
+
+		$(document).ready(function(){
+			$.each(imgArr, function(index, value){
+			$("#thumbs").append("<a rel='mygallery' class='fancy' href='" + value + "'><img src='" + value + "' /></a>");
+			$(".fancy").fancybox({
+				padding:0,
+				helpers:{overlay:{css:{'background':'pink'}}}
+			});
+			});
+		});		
+			
+	</script>
+			 
+</head>
+<body>
+	<div id="thumbs"></div>
+</body>
+</html>
