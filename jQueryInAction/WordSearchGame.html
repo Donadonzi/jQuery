@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Donz Word Search Game</title>
+
+	<style>
+		body {
+			font-family: sans-serif;
+		}
+
+		#instructions {
+			text-align: center;
+			margin: 2rem auto;
+		}
+
+		#container {
+			width: 810px;
+			height: 650px;
+			margin: 0 auto;
+		}
+		#words {
+			width: 200px;
+			height: 570px;
+			float: left;
+			text-align: center;
+			font-size: 30px;
+			border: 1px solid black;
+		}
+		#letters {
+			width: 600px;
+			height: 580px;
+			float: right;
+			
+		}
+		.letter {
+			width: 40px;
+			height: 40px;
+			float: left;
+			border: 1px solid black;
+			border-radius: 2px;
+			font-size: 25px;
+			text-align: center;
+			margin: 3px;
+		}
+		.done {
+			text-decoration: line-through;
+		}
+		.colored {
+			background-color: yellow;
+		}
+		.correct {
+			background-color: #03c703;
+			color: white;
+		}
+		#message {
+			color: purple;
+		}
+
+	</style>
+	
+	<script
+			src="https://code.jquery.com/jquery-3.4.1.min.js"
+			integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+			crossorigin="anonymous">
+	</script>
+
+	<script type="text/javascript">
+		var myWords = ["EGG", "MILK", "BUTTER", "JAM", "OATS", "SUGAR", "BREAD", "RUSK"];
+		var tempWords = [];
+		var selectedWord = '';
+
+		$(document).ready(function(){
+			arrangeGame();
+			$('.letter').click(function(){
+				selectedWord += $(this).html();
+				$(this).addClass('colored');
+				console.log(selectedWord);
+			});
+
+			// THIS DOESN'T WORK! I don't know why it seems to be working on her machine, 
+			//but on mine the string is turning empty even though I do not relase the ctrl key till end.
+			// So I'm gonna modify it to my own version.
+			// $(document).keydown(function(){
+			// 	selectedWord = '';
+			// }).keyup(function(){
+			// 	if (myWords.indexOf(selectedWord) >= 0) {
+			// 		$('#words p').each(function(key, item) {
+			// 			if (selectedWord == $(item).html()) {
+			// 				// alert($(this).html());
+			// 				$(this).addClass('done');
+			// 			}
+			// 		});
+			// 	}
+			// });
+
+			$(document).keyup(function(){
+				if (myWords.indexOf(selectedWord) >= 0) {
+					$('#words p').each(function(key, item) {
+						if (selectedWord == $(item).html()) {
+							// alert($(this).html());
+							$(this).addClass('done');
+							$('.colored').addClass('correct');
+							selectedWord = '';
+						}
+					});
+				}
+				selectedWord = '';
+				$('.letter').removeClass('colored');
+				if ($('.done').length == myWords.length) {
+					$('#words').empty().append(`<p id="message">Wow! You have done it :)</p>`);
+					
+				}
+			});
+
+
+		});
+
+		function arrangeGame() {
+			$.each(myWords, function(index, word){
+				$('#words').append(`<p>${word}</p>`);
+			});
+			for (var i = 1; i <= 12; i++) {
+				for (var j = 1; j <= 12; j++) {
+					$('#letters').append(`<div class="letter" data-row=${i} data-column=${j}></div>`);
+				}
+			}
+			placeCorrectLetters(myWords);
+			placeCorrectLetters(tempWords);
+			$.each($('.letter'), function(index, item){
+				if ($(item).attr('data-word') == undefined ) {
+					$(this).html(randomLetter());
+				}
+			});
+		}
+
+		function placeCorrectLetters(arr) {
+			var positions = ['row', 'column', 'diagonal'];
+			var newStart = 0;
+			var nextLetter = 0;
+			for (var i = 0; i < arr.length; i++) {
+				var orientation = positions[Math.floor(Math.random() * positions.length)];
+				var start = Math.floor(Math.random() * $('.letter').length);
+				var myRow = $('.letter').eq(start).data('row');
+				var myColumn = $('.letter').eq(start).data('column');
+				
+
+				if (orientation === 'row')
+				{
+					nextLetter = 1;
+					if (parseInt(myColumn) + arr[i].length <= 12)
+					{
+						newStart = start;
+						// console.log('enough space for ' + arr[i] + start);
+					}
+					else
+					{
+						var newColumn = 12 - arr[i].length;
+						newStart = $(`.letter[data-row="${myRow}"][data-column="${newColumn}"]`).index();
+						// console.log('no space for ' + arr[i] + start + myColumn);
+						// console.log('new start is ' + newStart);
+					}
+				} 
+				else if (orientation === 'column')
+				{
+					nextLetter = 12;
+					if (parseInt(myRow) + arr[i].length <= 12)
+					{
+						newStart = start;
+						// console.log('enough space for' + arr[i] + start);
+					}
+					else
+					{
+						var newRow = 12 - arr[i].length;
+						newStart = $(`.letter[data-row="${newRow}"][data-column="${myColumn}"]`).index();
+						// console.log('no space');
+					}
+				}
+				else if (orientation === 'diagonal')
+				{
+					nextLetter = 13;
+					if (parseInt(myColumn) + arr[i].length <= 12 && parseInt(myRow) + arr[i].length <= 12) {
+						newStart = start;
+					}
+					if (parseInt(myColumn) + arr[i].length > 12) {
+						var newColumn = 12 - arr[i].length;
+						newStart = $(`.letter[data-row="${myRow}"][data-column="${newColumn}"]`).index();
+					}
+					if (parseInt(myRow) + arr[i].length > 12) {
+						var newRow = 12 - arr[i].length;
+						newStart = $(`.letter[data-row="${newRow}"][data-column="${myColumn}"]`).index();
+					}
+					if (parseInt(myColumn) + arr[i].length > 12 && parseInt(myRow) + arr[i].length > 12) {
+						var newColumn = 12 - arr[i].length;
+						var newRow = 12 - arr[i].length;
+						newStart = $(`.letter[data-row="${newRow}"][data-column="${newColumn}"]`).index();
+					}
+				}
+				var characters = arr[i].split('');
+				var nextPosition = 0;
+				var occupied = checkOccupied(arr[i], newStart, orientation);
+				if (occupied === 'empty') {
+					$.each(characters, function(index, character){
+						$('.letter').eq(newStart + nextPosition).html(character);
+						$('.letter').eq(newStart + nextPosition).attr('data-word', arr[i]);
+						nextPosition += nextLetter;
+					});		
+				}
+				else 
+				{
+					tempWords.push(arr[i]);
+				}
+			}
+		// console.log(tempWords);
+		}
+
+		function checkOccupied(word, starting, orientation) {
+			var status = '';
+			var incrementBy = 0;
+			if (orientation === 'row') {
+				incrementBy = 1;
+			} else if (orientation === 'column') {
+				incrementBy = 12;
+			} else if (orientation === 'diagonal') {
+				incrementBy = 13;
+			}
+
+			for (var p = starting, q = 0; q < word.length; q++) {
+				if ( $('.letter').eq(p).attr('data-word') == undefined ) {
+					status = 'empty';
+				} else {
+					status = 'occupied';
+					break;
+				}
+				p += incrementBy;
+			}
+			return status;
+		}
+
+		function randomLetter() {
+			var alphabets = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+			return alphabets.charAt(Math.floor(Math.random() * 26));
+		}
+			
+	</script>
+			 
+</head>
+<body>
+	<div id="instructions">
+		<p>
+			The words are placed horizontally, vertically or diagonally. Click on the letters, 
+			and then press any key to evaluate.
+		</p>
+	</div>
+	<div class="" id="container">
+		<div class="" id="words"></div>
+		<div class="" id="letters"></div>
+	</div>
+</body>
+</html>
